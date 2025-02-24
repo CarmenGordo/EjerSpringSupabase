@@ -7,7 +7,6 @@ En postman:
 
 - Insertar: Post: http://localhost:8080/tareas
   {
-      "id": 2,
       "name": "bbb",
       "descripcion": "bbb",
       "fecha": "2025-01-03",

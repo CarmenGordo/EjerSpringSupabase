@@ -1,27 +1,40 @@
 package com.tareas.entities;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Date;
+
 @Entity
 @Table(name="Tarea")
 public class Tarea {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(name ="nombre")
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 1, max = 100, message = "El nombre debe tener entre 1 y 100 caracteres")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$", message = "El nombre solo puede contener letras y espacios")
     private String name;
+
     @Column(name ="descripcion")
+    @NotBlank(message = "La descripción es obligatoria")
+    @Size(min = 1, max = 255, message = "La descripción debe tener entre 1 y 255 caracteres")
     private String descripcion;
+
     @Column(name ="fecha")
+    @NotNull(message = "La fecha es obligatoria")
+    @PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate fecha;
+
     @Column(name ="estado")
+    @NotNull(message = "El estado es obligatorio")
     private Boolean estado;
 
-    public Tarea(){}
+    public Tarea() {}
 
-    public Tarea( String name, String descripcion, LocalDate fecha, Boolean estado) {
+    public Tarea(String name, String descripcion, LocalDate fecha, Boolean estado) {
         this.name = name;
         this.descripcion = descripcion;
         this.fecha = fecha;
