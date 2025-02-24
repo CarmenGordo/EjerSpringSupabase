@@ -1,0 +1,229 @@
+openapi: 3.0.0
+info:
+  title: API de Tareas
+  description: API para gestionar tareas en el sistema.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local de desarrollo
+
+paths:
+  /tareas:
+    get:
+      summary: Obtener todas las tareas
+      operationId: getAllTareas
+      tags:
+        - Tareas
+      responses:
+        '200':
+          description: Lista de todas las tareas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarea'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Crear una nueva tarea
+      operationId: createTarea
+      tags:
+        - Tareas
+      requestBody:
+        description: Tarea a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TareaInput'
+      responses:
+        '201':
+          description: Tarea creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+        '400':
+          description: Tipo de dato incorrecto para uno o más campos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tareas/{id}:
+    get:
+      summary: Obtener una tarea por ID
+      operationId: getTareaById
+      tags:
+        - Tareas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de la tarea
+      responses:
+        '200':
+          description: Tarea encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Actualizar una tarea por ID
+      operationId: updateTarea
+      tags:
+        - Tareas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de la tarea
+      requestBody:
+        description: Datos de la tarea a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TareaInput'
+      responses:
+        '200':
+          description: Tarea actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+        '400':
+          description: Tipo de dato incorrecto para uno o más campos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Eliminar una tarea por ID
+      operationId: deleteTarea
+      tags:
+        - Tareas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de la tarea
+      responses:
+        '204':
+          description: Tarea eliminada exitosamente
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Tarea:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único de la tarea
+        name:
+          type: string
+          description: Nombre de la tarea
+        descripcion:
+          type: string
+          description: Descripción de la tarea
+        fecha:
+          type: string
+          format: date
+          description: Fecha de la tarea
+        estado:
+          type: boolean
+          description: Estado de la tarea
+      required:
+        - name
+        - descripcion
+        - fecha
+        - estado
+
+    TareaInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la tarea
+        descripcion:
+          type: string
+          description: Descripción de la tarea
+        fecha:
+          type: string
+          format: date
+          description: Fecha de la tarea
+        estado:
+          type: boolean
+          description: Estado de la tarea
+      required:
+        - name
+        - descripcion
+        - fecha
+        - estado
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Descripción del error
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje general de error de validación
