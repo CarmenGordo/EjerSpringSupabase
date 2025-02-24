@@ -29,9 +29,19 @@ public class TareaServicios {
         if (optionalTarea.isPresent()) {
             Tarea existingTarea = optionalTarea.get();
             existingTarea.setName(tarea.getName());
+
+            // Validar y establecer descripcion
+            if (!(tarea.getDescripcion() instanceof String)) {
+                throw new IllegalArgumentException("La descripción debe ser un String");
+            }
             existingTarea.setDescripcion(tarea.getDescripcion());
+
+            // Establecer fecha
             existingTarea.setFecha(tarea.getFecha());
+
+            // Establecer estado
             existingTarea.setEstado(tarea.getEstado());
+
             return tareaRepository.save(existingTarea);
         } else {
             throw new RuntimeException("Tarea no encontrada con id " + id);

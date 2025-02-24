@@ -25,7 +25,6 @@ public class Tarea {
 
     @Column(name ="fecha")
     @NotNull(message = "La fecha es obligatoria")
-    @PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate fecha;
 
     @Column(name ="estado")
@@ -62,6 +61,9 @@ public class Tarea {
     }
 
     public void setDescripcion(String descripcion) {
+        if (!(descripcion instanceof String)) {
+            throw new IllegalArgumentException("La descripción debe ser una cadena de texto");
+        }
         this.descripcion = descripcion;
     }
 
